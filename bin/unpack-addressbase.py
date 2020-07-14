@@ -2,7 +2,6 @@
 
 # unpack AddressBase Premium ZIP into a CSV file for each table with headers
 
-
 import sys
 import csv
 from io import TextIOWrapper
@@ -15,6 +14,7 @@ writer = {}
 
 
 def load_header(filename, reader):
+    # header filenames are in the format "cache/Record_10_HEADER_Header.csv"
     (_, record, name, _) = filename.split("_")
     fieldnames = next(reader)
     path = "%s%s.csv" % (outdir, name)
