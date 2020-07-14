@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+.ipynb_checkpoints/
+
+*.swp
+
+# maybe make this a large-file
+*.db
+
+local
+cache
+var
+tmp

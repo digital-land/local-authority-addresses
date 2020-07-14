@@ -1,0 +1,13 @@
+   39099225 var/BLPU.csv
+   42903662 var/CLASSIFICATION.csv
+   29453418 var/DELIVERYPOINTADDRESS.csv
+        352 var/HEADER.csv
+   43689946 var/LPI.csv
+        352 var/METADATA.csv
+    1265705 var/ORGANISATION.csv
+    1435692 var/STREET.csv
+    1550804 var/STREETDESCRIPTOR.csv
+          1 var/SUCCESSOR.csv
+        352 var/TRAILER.csv
+  190773977 var/XREF.csv
+  350173486 total
