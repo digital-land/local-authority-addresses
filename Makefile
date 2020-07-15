@@ -10,12 +10,13 @@ OPENUPRN_ZIP=cache/OPENUPRN_2020_06.zip
 DOWNLOADS=\
 	$(AB_ZIP)\
 	$(AB_HEADERS_CSV)\
+	$(AB_CUSTODIANS_ZIP)\
 	$(ONSPD_ZIP)\
 	$(ONSUD_ZIP)\
 	$(NSPL_ZIP)\
 	$(OPENUPRN_ZIP)
 
-all:	unpack-addressbase counts.txt
+all:	download unpack-addressbase counts.txt
 
 counts.txt:	var/BLPU.csv
 	wc -l var/*.csv > $@
@@ -44,8 +45,13 @@ $(NSPL_ZIP):
 $(OPENUPRN_ZIP):
 	curl -qsL 'https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect' > $@
 
+# https://www.ordnancesurvey.co.uk/business-government/tools-support/addressbase-premium-support
 $(AB_HEADERS_CSV):
 	curl -qsL 'https://www.ordnancesurvey.co.uk/documents/product-support/support/addressbase-premium-header-files.zip' > $@
+
+# https://www.ordnancesurvey.co.uk/business-government/tools-support/addressbase-premium-support
+$(AB_CUSTODIANS_ZIP):
+	curl -qsL 'https://www.ordnancesurvey.co.uk/documents/product-support/support/addressbase-local-custodian-codes.zip' > $@
 
 init:
 
