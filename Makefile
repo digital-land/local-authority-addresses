@@ -1,6 +1,7 @@
 # sources
 AB_ZIP=cache/AB76GB_CSV.zip
 AB_HEADERS_CSV=cache/addressbase-premium-header-files.zip
+AB_CUSTODIANS_ZIP=cache/addressbase-local-custodian-codes.zip
 ONSPD_ZIP=cache/ONSPD_MAY_2020_UK.zip
 ONSUD_ZIP=cache/ONSUD_MAY_2020.zip
 NSPL_ZIP=cache/NSPL_MAY_2020_UK.zip
@@ -16,7 +17,7 @@ DOWNLOADS=\
 
 all:	unpack-addressbase counts.txt
 
-counts.txt:	unpack-addressbase
+counts.txt:	var/BLPU.csv
 	wc -l var/*.csv > $@
 
 unpack-addressbase:	var/BLPU.csv
