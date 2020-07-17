@@ -7,7 +7,7 @@ import csv
 from io import TextIOWrapper
 from zipfile import ZipFile
 
-outdir = "./var/"
+outdir = "./var/AddressBase/"
 
 header = {}
 writer = {}

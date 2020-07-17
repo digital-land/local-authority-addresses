@@ -13,3 +13,6 @@ local
 cache
 var
 tmp
+data/uprn.csv
+data/postcode.csv
+data/organisation.csv

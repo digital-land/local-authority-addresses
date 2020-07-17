@@ -2,9 +2,11 @@
 
 The aim of this analysis is to complete the following statements to support our guidance on how to find the local authority for an address:
 
-  * X% of postcodes in England overlap a local authority boundary, affecting Y% of addresses.
+  * % of postcodes in England overlap a local authority boundary, affecting 1.2% of addresses.
   * POSTCODE has addresses with the largest number of different custodians (LA1, LA2, ..)
   * POSTCODE has the largest number of addresses differing to ONSPD (X in LA1, Y in LA2)
+
+[report.md](report.md)
 
 # Data sources
 
