@@ -1,5 +1,7 @@
+.PHONY: init data report clean clobber prune
+
 # sources
-ORGANISATION_CSV=data/organisation.csv
+ORGANISATION_CSV=var/organisation.csv
 AddressBase_ZIP=cache/AB76GB_CSV.zip
 AddressBase_HEADERS_CSV=cache/addressbase-premium-header-files.zip
 AddressBase_CUSTODIANS_ZIP=cache/addressbase-local-custodian-codes.zip
@@ -34,43 +36,82 @@ AddressBase_DATA=\
 	var/AddressBase/TRAILER.csv\
 	var/AddressBase/XREF.csv
 
+# published data
 DATA=\
-	data/organisation.csv\
-	data/postcode.csv\
-	data/uprn.csv\
+	var/README.md\
+	data/totals.json
+
+# working data
+# -- too big, or proprietary to publish
+VAR=\
 	$(AddressBase_DATA)\
+	var/organisation.csv\
+	var/uprn.csv\
 	var/organisation.csv\
 	var/osopenuprn.csv\
 	var/codepo.csv\
 	var/NSPL.csv\
 	var/ONSPD.csv\
-	var/ONSUD.csv
-	
-#CUSTODIAN.csv
+	var/ONSUD.csv\
+	var/postcode.csv\
+	var/custodian-lad-count.csv\
+	var/postcode-uprn-count.csv\
+	var/postcode-lad-uprn-count.csv\
+	var/postcode-lad-count.csv
 
-all:	counts.txt report.md
+all:	data report
 
-report.md:	data/uprn-count.json bin/report.py
-	python3 bin/report.py < data/uprn-count.json > $@
+report:	report.md
 
-data/uprn-count.json:	data/uprn.csv bin/uprn-count.py
-	python3 bin/uprn-count.py > $@
+report.md:	data/totals.json bin/report.py
+	python3 bin/report.py < data/totals.json > $@
 
-counts.txt:	$(DATA)
-	wc -l $(DATA) > $@
+data:	$(DATA)
 
-data/postcode.csv:	var/NSPL.csv var/ONSPD.csv var/codepo.csv bin/postcode.py
+# working data index
+var/README.md:	$(VAR) bin/index.sh
+	bin/index.sh $(VAR) > $@
+
+# totals 
+data/totals.json:	var/uprn.csv bin/totals.py
+	python3 bin/totals.py var/totals.csv > $@
+
+# count of UPRNs for custodian/LAD combinations
+# addressbase-custodian,ONSUD,ONSPD,count
+var/custodian-lad-count.csv:	var/uprn.csv bin/custodian-lad-count.sh
+	bin/custodian-lad-count.sh < var/uprn.csv > $@
+
+# count of UPRNs for each postcode
+# count,postcode
+var/postcode-uprn-count.csv:	var/uprn.csv bin/postcode-uprn-count.sh
+	bin/postcode-uprn-count.sh < var/uprn.csv > $@
+
+# count of URRNs for LAD combinations
+#postcode,ONSPD,ONSUD,count
+var/postcode-lad-uprn-count.csv:	var/uprn.csv bin/postcode-lad-uprn-count.sh
+	bin/postcode-lad-uprn-count.sh < var/uprn.csv > $@
+
+# count of LADs for each postcode
+var/postcode-lad-count.csv:	var/postcode-uprn-count.csv bin/postcode-lad-count.sh
+	bin/postcode-lad-count.sh < var/postcode-uprn-count.csv > $@
+
+# list of postcodes
+# postcode,codepo,ONSPD,NSPL
+var/postcode.csv:	var/NSPL.csv var/ONSPD.csv var/codepo.csv bin/postcode.py
 	@mkdir -p data
 	python3 bin/postcode.py
 
-data/uprn.csv:	var/AddressBase/BLPU.csv var/ONSUD.csv bin/uprn.py
+# uprn,postcode,addressbase-custodian,ONSUD,ONSPD
+var/uprn.csv:	var/AddressBase/BLPU.csv var/ONSUD.csv bin/uprn.py
 	@mkdir -p data
 	time python3 bin/uprn.py
 
+# unpack AddressBase into a file for each record type
 $(AddressBase_DATA):	 bin/unpack-addressbase.py $(AddressBase_ZIP) $(AddressBase_HEADERS_CSV)
 	@mkdir -p var/
 	python3 bin/unpack-addressbase.py $(AddressBase_HEADERS_CSV) $(AddressBase_ZIP)
 
+# postcode,local-authority-district
 var/NSPL.csv:	$(NSPL_ZIP)
 	unzip -p $(NSPL_ZIP) 'Data/*.csv' | csvcut -c pcds,laua | sed -e '1{s/pcds,laua/postcode,local-authority-district/}' -e '/^pcds,/d' > $@
 
@@ -83,7 +124,7 @@ var/ONSUD.csv:	$(ONSUD_ZIP)
 var/codepo.csv:	$(CODEPO_ZIP)
 	unzip -p $(CODEPO_ZIP) 'Data/CSV/*.csv' | csvcut -c 1,3,4,9 | sed -e '1i postcode,easting,northing,local-authority-district' > $@
 
-# CSV file contains a spurious BOM
+# OS published CSV file contains an invalid BOM
 var/osopenuprn.csv:	$(OPENUPRN_ZIP)
 	unzip -p $(OPENUPRN_ZIP) '*.csv' | sed '1s/^\xEF\xBB\xBF//' | csvcut -c UPRN,LATITUDE,LONGITUDE | sed -e '1{s/UPRN,LATITUDE,LONGITUDE/uprn,latitude,longitude/}' > $@
 
@@ -128,6 +169,7 @@ $(ORGANISATION_CSV):
 	curl -qsL 'https://raw.githubusercontent.com/digital-land/organisation-dataset/master/collection/organisation.csv' > $@
 
 init:
+	pip3 install -r requirements.txt
 
 clean:
 

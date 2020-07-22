@@ -20,7 +20,7 @@ total = {
 
 if __name__ == "__main__":
 
-    for row in csv.DictReader(open("data/uprn.csv")):
+    for row in csv.DictReader(open("var/uprn.csv")):
         total["all"] += 1
 
         # only look at BPLUs with ONSUD entry

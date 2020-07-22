@@ -1,12 +1,13 @@
-# Finding the local authority for an address
+# How to find the local authority for an address
 
-The aim of this analysis is to complete the following statements to support our guidance on how to find the local authority for an address:
+[Guidance](https://digital-land.github.io/local-authority-addresses) to help people building a government or other public service determine the local authority which an individual property or premises resides.
 
-  * % of postcodes in England overlap a local authority boundary, affecting 1.2% of addresses.
+This repository also includes [Analysis](https://digital-land.github.io/local-authority-addresses/analysis)) of 
+
+  * 1.2% of addresses are in a Local Authority District which is different to the postcode in ONSPD.
+  * 1% of postcodes in England overlap a local authority boundary, affecting % of addresses.
   * POSTCODE has addresses with the largest number of different custodians (LA1, LA2, ..)
   * POSTCODE has the largest number of addresses differing to ONSPD (X in LA1, Y in LA2)
-
-[report.md](report.md)
 
 # Data sources
 

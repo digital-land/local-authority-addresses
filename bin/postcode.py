@@ -20,7 +20,7 @@ if __name__ == "__main__":
     load("ONSPD")
     load("NSPL")
 
-    writer = csv.DictWriter(open("data/postcode.csv", "w", newline=""), fieldnames=fieldnames)
+    writer = csv.DictWriter(open("var/postcode.csv", "w", newline=""), fieldnames=fieldnames)
     writer.writeheader()
 
     for postcode, row in sorted(postcode.items()):

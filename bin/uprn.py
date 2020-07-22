@@ -11,7 +11,7 @@ fieldnames = ["uprn", "postcode", "addressbase-custodian", "ONSUD", "ONSPD"]
 if __name__ == "__main__":
 
     print("reading postcode .. ")
-    for row in csv.DictReader(open("data/postcode.csv")):
+    for row in csv.DictReader(open("var/postcode.csv")):
         postcode[row["postcode"]] = row["ONSPD"]
 
     print("reading BLPU .. ")
@@ -30,7 +30,7 @@ if __name__ == "__main__":
         uprn[key]["ONSUD"] = row["local-authority-district"]
 
     print("writing .. ")
-    writer = csv.DictWriter(open("data/uprn.csv", "w", newline=""), fieldnames=fieldnames)
+    writer = csv.DictWriter(open("var/uprn.csv", "w", newline=""), fieldnames=fieldnames)
     writer.writeheader()
 
     for uprn, row in uprn.items():

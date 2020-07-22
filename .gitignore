@@ -12,7 +12,5 @@ __pycache__/
 local
 cache
 var
+data
 tmp
-data/uprn.csv
-data/postcode.csv
-data/organisation.csv
