@@ -18,9 +18,9 @@ Sources such as ONSPD and NSUL are designed for grouping data containing address
 
 ## Asking the user to select the local authority
 
-Rather than attempting to find the local authority from the postcode, a service could ask the user to select their local authority from a list of local authorities.
+A service asking for information may ask the user to choose the local authority from a list of local authorities.
 
-However, this approach does not work for many people or situations, such as when providing information about a work or someone else’s address. This is particularly unreliable where the address is close to a local authority boundary. In such cases the user will either need to search for the answer elsewhere. They will often take a guess.
+This approach puts more burden on the user, and does not work for many people or situations, such as when providing information about a different address to where they live. This approach is particularly unreliable where the address is close to a local authority boundary. In such cases the user will either need to search for the answer elsewhere. They will often resort to guessing.
 
 
 ## Use the UPRN
@@ -32,7 +32,7 @@ To reliably direct a user to their local authority, or send data associated with
 
 Local authorities who have a statutory duty to number and name streets, maintain a [Local Land and Property Gazetteer (LLPG)](https://en.wikipedia.org/wiki/Local_Land_and_Property_Gazetteer). These are compiled by [GeoPlace LLP](https://www.geoplace.co.uk/) into the National Land and Property Gazetteer (NLPG), which is marketed by OS as a suite of [AddressBase](https://www.ordnancesurvey.co.uk/business-government/products/addressbase) products.
 
-The data from one of the AddressBase products can be incorporated into your service, though this will require operational support as the data is updated every 6 weeks. It is currently difficult to automate the process of ordering and updating a new copy of AddressBase data into a local database.
+The data from one of the AddressBase products can be incorporated into your service, though this will require operational support as the data changes frequently, and is updated every 6 weeks. It is currently difficult to automate the process of ordering and updating a new copy of AddressBase data into a local database.
 
 A service may be able to use [OS Places](https://developer.ordnancesurvey.co.uk/os-places-api), [Surrey Digital Services Address Lookup](https://surreydigitalservices.github.io/sds-addresses/), or one of the other APIs offered by companies on the Digital Marketplace. The privacy of the user and sensitivity of the addresses being looked-up should be considered when using a third-party API.
 
@@ -71,7 +71,7 @@ _It is not clear how best to provide a custodian feedback on issues with lots of
 
 ### Bulk address matching services
 
-ONS, GeoPlace and a number of other [companies listed on G-Cloud](https://www.digitalmarketplace.service.gov.uk/g-cloud/search) offer services to match text addresses in bulk datasets.
+Matching large datasets to a gazetteer is a specialist activity, requiring clerical work to make decisions on ambiguous and unknown addresses. ONS, GeoPlace and a number of other [companies listed on G-Cloud](https://www.digitalmarketplace.service.gov.uk/g-cloud/search) offer services to help match text addresses in bulk datasets.
 
 
 ### Find the local authority district from the UPRN
