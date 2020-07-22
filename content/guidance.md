@@ -78,7 +78,7 @@ Matching large datasets to a gazetteer is a specialist activity, requiring cleri
 
 ONS periodically publishes a [National Statistics UPRN Lookup (NSUL)](https://geoportal.statistics.gov.uk/datasets/national-statistics-uprn-lookup-march-2020) dataset, a set of CSV files which can be used to translate a UPRN to various statistical geography codes, including the local authority district (LAD).
 
-Alternatively, use AddressBase to find the custodian for the UPRN. [The Digital Land organisation dataset](https://digital-land.github.io/organisation/) has a mapping to find the organisation, and Local Authority District from the AddressBase custodian code._ _
+Alternatively, use AddressBase to find the custodian for the UPRN. [The Digital Land organisation dataset](https://digital-land.github.io/organisation/) has a mapping to find the organisation, and Local Authority District from the AddressBase custodian code.
 
 
 ## Finding the organisation, forum or hub for a local authority district
