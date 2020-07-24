@@ -4,7 +4,7 @@ import sys
 import csv
 
 postcode = {}
-fieldnames = ["postcode", "codepo", "ONSPD", "NSPL"]
+fieldnames = ["postcode", "codepo", "onspd", "nspl"]
 
 
 def load(name):
@@ -12,16 +12,16 @@ def load(name):
         key = row["postcode"].replace(" ", "")
         postcode.setdefault(key, {})
         postcode[key]["postcode"] = row["postcode"]
-        postcode[key][name] = row["local-authority-district"]
+        postcode[key][name] = row[name]
 
 
 if __name__ == "__main__":
     load("codepo")
-    load("ONSPD")
-    load("NSPL")
+    load("onspd")
+    load("nspl")
 
-    writer = csv.DictWriter(open("var/postcode.csv", "w", newline=""), fieldnames=fieldnames)
+    writer = csv.DictWriter(sys.stdout, fieldnames=fieldnames)
     writer.writeheader()
 
-    for postcode, row in sorted(postcode.items()):
+    for postcode, row in postcode.items():
         writer.writerow(row)

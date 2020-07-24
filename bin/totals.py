@@ -5,7 +5,7 @@ import csv
 import json
 
 postcode = {}
-fieldnames = ["postcode", "ONSUD", "ONSPD"]
+fieldnames = ["postcode", "onsud", "onspd"]
 
 total = {
     'all': 0,
@@ -20,31 +20,31 @@ total = {
 
 if __name__ == "__main__":
 
-    for row in csv.DictReader(open("var/uprn.csv")):
+    for row in csv.DictReader(open("var/postcode-uprn.csv")):
         total["all"] += 1
 
         # only look at BPLUs with ONSUD entry
-        if row["ONSUD"] == "":
+        if row["onsud"] == "":
             total["missing-onsud"] += 1
             continue
 
         # skip addresses outside of England
-        if row["ONSUD"][0] != "E":
-            if row["ONSPD"][0:1] == "E":
+        if row["onsud"][0] != "E":
+            if row["onspd"][0:1] == "E":
                 total["adopted"] += 1
             continue
 
         total["england"] += 1
 
-        # compare ONSUD and ONSPD
-        if row["ONSPD"] == "":
+        # compare onsud and onspd
+        if row["onspd"] == "":
             total["missing-onspd"] += 1
-        elif row["ONSUD"] == row["ONSPD"]:
+        elif row["onsud"] == row["onspd"]:
             total["same"] += 1
         else:
             total["different"] += 1
 
-            if row["ONSUD"][0:1] != row["ONSPD"][0:1]:
+            if row["onsud"][0:1] != row["onspd"][0:1]:
                 total["exiled"] += 1
 
     print(json.dumps(total, sort_keys=True, indent=4))

@@ -46,14 +46,14 @@ DATA=\
 VAR=\
 	$(AddressBase_DATA)\
 	var/organisation.csv\
-	var/uprn.csv\
 	var/organisation.csv\
 	var/osopenuprn.csv\
 	var/codepo.csv\
-	var/NSPL.csv\
-	var/ONSPD.csv\
-	var/ONSUD.csv\
+	var/nspl.csv\
+	var/onspd.csv\
+	var/onsud.csv\
 	var/postcode.csv\
+	var/postcode-uprn.csv\
 	var/custodian-lad-count.csv\
 	var/postcode-uprn-count.csv\
 	var/postcode-lad-uprn-count.csv\
@@ -73,59 +73,82 @@ var/README.md:	$(VAR) bin/index.sh
 	bin/index.sh $(VAR) > $@
 
 # totals 
-data/totals.json:	var/uprn.csv bin/totals.py
-	python3 bin/totals.py var/totals.csv > $@
+data/totals.json:	var/postcode-uprn.csv bin/totals.py
+	time python3 bin/totals.py var/totals.csv > $@
+
+### counts
 
 # count of UPRNs for custodian/LAD combinations
-# addressbase-custodian,ONSUD,ONSPD,count
-var/custodian-lad-count.csv:	var/uprn.csv bin/custodian-lad-count.sh
-	bin/custodian-lad-count.sh < var/uprn.csv > $@
+# addressbase-custodian,onsud,onspd,count
+var/custodian-lad-count.csv:	var/postcode-uprn.csv
+	{ COLS="addressbase-custodian,onsud,onspd" ; echo "$$COLS,count"; csvcut -c "$$COLS" | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\2,\1/' ; } <$< > $@
+
+# count of LADs for each postcode
+var/postcode-lad-count.csv:	var/postcode-uprn-count.csv
+	{ echo "count,postcode" ; csvcut -c postcode | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\1,\2/' | sort -rn ; } < $< > $@
 
 # count of UPRNs for each postcode
 # count,postcode
-var/postcode-uprn-count.csv:	var/uprn.csv bin/postcode-uprn-count.sh
-	bin/postcode-uprn-count.sh < var/uprn.csv > $@
+var/postcode-uprn-count.csv:	var/postcode-uprn.csv
+	{ echo "count,postcode" ; csvcut -c postcode | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\1,\2/' | sort -rn ; } < $< > $@
 
-# count of URRNs for LAD combinations
-#postcode,ONSPD,ONSUD,count
-var/postcode-lad-uprn-count.csv:	var/uprn.csv bin/postcode-lad-uprn-count.sh
-	bin/postcode-lad-uprn-count.sh < var/uprn.csv > $@
+# count of UPRNs for LAD combinations
+#postcode,onspd,onsud,count
+var/postcode-lad-uprn-count.csv:	var/postcode-uprn.csv
+	{ COLS="postcode,onspd,onsud"; echo "$$COLS,count"; csvcut -c "$$COLS" | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\2,\1/' ; }< $< > $@
 
-# count of LADs for each postcode
-var/postcode-lad-count.csv:	var/postcode-uprn-count.csv bin/postcode-lad-count.sh
-	bin/postcode-lad-count.sh < var/postcode-uprn-count.csv > $@
+#
+# index of UPRNs by postcode with de-normalised postcode assigned LADs
+# postcode,uprn,addressbase-custodian,onsud,codepo,onspd,nspl
+var/postcode-uprn.csv:	var/postcode-blpu.csv var/postcode.csv
+	join --header -t, -1 1 -2 1 var/postcode-blpu.csv var/postcode.csv > $@
 
-# list of postcodes
-# postcode,codepo,ONSPD,NSPL
-var/postcode.csv:	var/NSPL.csv var/ONSPD.csv var/codepo.csv bin/postcode.py
-	@mkdir -p data
-	python3 bin/postcode.py
+## pipeline
 
-# uprn,postcode,addressbase-custodian,ONSUD,ONSPD
-var/uprn.csv:	var/AddressBase/BLPU.csv var/ONSUD.csv bin/uprn.py
-	@mkdir -p data
-	time python3 bin/uprn.py
+# BLPUs merged with ONSUD, ordered by postcode
+# uprn,postcode,addressbase-custodian,onsud
+var/postcode-blpu.csv:	var/blpu-onsud.csv
+	csvcut -c postcode,uprn,addressbase-custodian,onsud var/blpu-onsud.csv | bin/csvsort.sh -t, -k1,1 > $@
+
+# BLPUs merged with ONSUD
+# uprn,postcode,addressbase-custodian,onsud
+var/blpu-onsud.csv:	var/blpu.csv var/onsud.csv
+	join --header -t, -1 1 -2 1 var/blpu.csv var/onsud.csv > $@
+
+# list of BLPUs
+# uprn,postcode,addressbase-custodian
+var/blpu.csv:	var/AddressBase/BLPU.csv
+	csvcut -c "UPRN,POSTCODE_LOCATOR,LOCAL_CUSTODIAN_CODE" var/AddressBase/BLPU.csv | sed 1d | { echo "uprn,postcode,addressbase-custodian" ; sort -k1,1 -t, ; }
 
 # unpack AddressBase into a file for each record type
 $(AddressBase_DATA):	 bin/unpack-addressbase.py $(AddressBase_ZIP) $(AddressBase_HEADERS_CSV)
-	@mkdir -p var/
+	@mkdir -p var/AddressBase/
 	python3 bin/unpack-addressbase.py $(AddressBase_HEADERS_CSV) $(AddressBase_ZIP)
 
-# postcode,local-authority-district
-var/NSPL.csv:	$(NSPL_ZIP)
-	unzip -p $(NSPL_ZIP) 'Data/*.csv' | csvcut -c pcds,laua | sed -e '1{s/pcds,laua/postcode,local-authority-district/}' -e '/^pcds,/d' > $@
+# list of postcodes
+# postcode,codepo,onspd,nspl
+var/postcode.csv:	var/nspl.csv var/onspd.csv var/codepo.csv bin/postcode.py
+	python3 bin/postcode.py | bin/csvsort.sh -t, -k1.1 -k2.2> $@
 
-var/ONSPD.csv:	$(ONSPD_ZIP)
-	unzip -p $(ONSPD_ZIP) 'Data/*.csv' | csvcut -c pcds,oslaua | sed -e '1{s/pcds,oslaua/postcode,local-authority-district/}' -e '/^pcds,/d' > $@
+var/nspl.csv:	$(NSPL_ZIP)
+	@mkdir -p var/
+	unzip -p $(NSPL_ZIP) 'Data/*.csv' | csvcut -c pcds,laua | sed -e '1{s/pcds,laua/postcode,nspl/}' -e '/^pcds,/d' > $@
 
-var/ONSUD.csv:	$(ONSUD_ZIP)
-	unzip -p $(ONSUD_ZIP) 'Data/*.csv' | csvcut -c uprn,lad19cd | sed -e '1{s/uprn,lad19cd/uprn,local-authority-district/}' -e '1!{/^uprn,/d;}' > $@
+var/onspd.csv:	$(ONSPD_ZIP)
+	@mkdir -p var/
+	unzip -p $(ONSPD_ZIP) 'Data/*.csv' | csvcut -c pcds,oslaua | sed -e '1{s/pcds,oslaua/postcode,onspd/}' -e '/^pcds,/d' > $@
+
+var/onsud.csv:	$(ONSUD_ZIP)
+	@mkdir -p var/
+	unzip -p $(ONSUD_ZIP) 'Data/*.csv' | csvcut -c uprn,lad19cd | sed -e '1{s/uprn,lad19cd/uprn,onsud/}' -e '1!{/^uprn,/d;}' | bin/csvsort.sh -t, -k1,1 -k2,2 > $@
 
 var/codepo.csv:	$(CODEPO_ZIP)
-	unzip -p $(CODEPO_ZIP) 'Data/CSV/*.csv' | csvcut -c 1,3,4,9 | sed -e '1i postcode,easting,northing,local-authority-district' > $@
+	@mkdir -p var/
+	unzip -p $(CODEPO_ZIP) 'Data/CSV/*.csv' | csvcut -c 1,3,4,9 | sed -e '1i postcode,easting,northing,codepo' > $@
 
 # OS published CSV file contains an invalid BOM
 var/osopenuprn.csv:	$(OPENUPRN_ZIP)
+	@mkdir -p var/
 	unzip -p $(OPENUPRN_ZIP) '*.csv' | sed '1s/^\xEF\xBB\xBF//' | csvcut -c UPRN,LATITUDE,LONGITUDE | sed -e '1{s/UPRN,LATITUDE,LONGITUDE/uprn,latitude,longitude/}' > $@
 
 download: $(DOWNLOADS)
@@ -171,9 +194,11 @@ $(ORGANISATION_CSV):
 init:
 	pip3 install -r requirements.txt
 
-clean:
-
 clobber:
+	rm -rf ./doc/ ./data/
 
-prune:
-	rm -rf ./cache ./var ./data
+clean:	clobber
+	rm -rf ./var
+
+prune:	clean
+	rm -rf ./cache
