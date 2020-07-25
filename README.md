@@ -35,6 +35,8 @@ We recommend working in [virtual environment](http://docs.python-guide.org/en/la
     $ make init
     $ make
 
+This version uses a chain of CSV files which are sorted and joined to make different sets which are then counted.
+
 # Licence
 
 The software in this project is open source and covered by the [LICENSE](LICENSE) file.
