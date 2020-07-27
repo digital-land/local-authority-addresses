@@ -4,7 +4,10 @@ title: Finding the local authority for an address
 
 This guidance is intended to help people building a government or other public service determine the local authority which an individual property or premises resides.
 
+
 ## Using the postcode
+
+The postcode alone is insufficent information to find the local authority for many addresses.
 
 The Office for National Statistics (ONS) publishes the National Statistics Postcode Lookup ([NSPL](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=name&tags=all(PRD_NSPL))) and ONS Postcode Directory (ONSPD) [datasets](https://www.ons.gov.uk/methodology/geography/geographicalproducts/postcodeproducts), which may be used to find a local authority district for a postcode when compiling statistics.
 
@@ -14,14 +17,14 @@ Code Point Open and ONSPD find the centre point of the set of addresses with the
 
 This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or [1.2% of addresses](https://github.com/digital-land/local-authority-postcodes/blob/master/report.md) in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 550 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.
 
-Sources such as ONSPD and NSUL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts. They are therefore unsuitable when you need to reliably find the local authority for an individual address.
+Sources such as ONSPD and NSUL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts.
 
 
 ## Asking the user to provide the local authority
 
 A service asking for information may ask the user to choose the local authority from a list of local authorities.
 
-This approach puts more burden on the user, and does not work for many people or situations, such as when providing information about a different address to where they live. This approach is particularly unreliable where the address is close to a local authority boundary. In such cases the user will either need to search for the answer elsewhere. They will often resort to guessing.
+This approach places a burden on the user, and does not work for many people or situations, such as when providing information about a different address to where they live. This approach is particularly unreliable where the address is close to a local authority boundary. In such cases the user will either need to search for the answer elsewhere. They will often resort to guessing.
 
 
 ## Use the UPRN
