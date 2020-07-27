@@ -1,4 +1,5 @@
-.PHONY: init data report clean clobber prune
+.PHONY: init data report docs clean clobber prune
+.DELETE_ON_ERROR:
 
 # sources
 ORGANISATION_CSV=var/organisation.csv
@@ -59,7 +60,13 @@ VAR=\
 	var/postcode-lad-uprn-count.csv\
 	var/postcode-lad-count.csv
 
-all:	data report
+all:	data report docs
+
+docs:	docs/index.html
+
+docs/index.html:	bin/render.py templates/guidance.html content/guidance.md
+	@mkdir -p docs/
+	python3 bin/render.py
 
 report:	report.md
 

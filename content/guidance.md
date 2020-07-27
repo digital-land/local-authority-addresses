@@ -1,7 +1,8 @@
-## How to find the local authority for an address
+---
+title: Finding the local authority for an address
+---
 
 This guidance is intended to help people building a government or other public service determine the local authority which an individual property or premises resides.
-
 
 ## Using the postcode
 
@@ -16,7 +17,7 @@ This means that each postcode is assigned a single local authority. Unfortunatel
 Sources such as ONSPD and NSUL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts. They are therefore unsuitable when you need to reliably find the local authority for an individual address.
 
 
-## Asking the user to select the local authority
+## Asking the user to provide the local authority
 
 A service asking for information may ask the user to choose the local authority from a list of local authorities.
 

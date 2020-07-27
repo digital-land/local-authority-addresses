@@ -1,3 +1,4 @@
 csvkit==1.0.5
+markdown==3.2.2
+frontmatter==3.0.7
 -e git+https://github.com/digital-land/govuk-jinja-components.git#egg=govuk_jinja_components
-

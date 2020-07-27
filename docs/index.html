@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="govuk-template ">
+  <head>
+    <meta charset="utf-8" />
+    <title>GOV.UK - The best place to find government services and information</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b0c0c" /> 
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+      <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="/assets/images/favicon.ico" type="image/x-icon" />
+      <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="#0b0c0c"> 
+      <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
+      <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
+      <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
+      <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+    
+
+    
+<!-- TBD: move to version which is on our CDN -->
+<link href="https://digital-land-design.herokuapp.com/static/stylesheets/dl-frontend.css" rel="stylesheet" />
+
+    
+    
+    <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
+  </head>
+  <body class="govuk-template__body ">
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    
+
+    
+      <a href="#content" class="govuk-skip-link"></a>
+    
+
+    
+<header role="banner" id="global-header" class="govuk-header  with-proposition dl-header">
+  <div class="govuk-header__container govuk-width-container">
+    <div class="header-proposition">
+      <div class="govuk-header__content">
+        <a href="https://digital-land.github.io/" class="govuk-header__link govuk-header__link--service-name">
+        Digital Land
+        </a>
+        <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
+
+        <nav>
+          <ul id="navigation" class="govuk-header__navigation" aria-label="Top Level Navigation">
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/about">Team</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/project/">Projects</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/weeknote/">Weeknotes</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/blog-post/">Blog</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/guidance/">Guidance</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/dataset/">Datasets</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/organisation/">Organisations</a>
+            </li>
+            <li class="govuk-header__navigation-item">
+              <a class="govuk-header__link" href="/map/">Map</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+    
+      <div class="govuk-width-container">
+        
+	<div class="govuk-phase-banner govuk-width-container">
+  <p class="govuk-phase-banner__content"><strong class="govuk-tag govuk-phase-banner__content__tag ">
+  prototype
+</strong><span class="govuk-phase-banner__text">
+      This is a prototype. Please provide feedback to the Digital Land team.
+    </span>
+  </p>
+</div>
+
+  
+
+  <div class="govuk-breadcrumbs ">
+  <ol class="govuk-breadcrumbs__list">
+  
+    
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="https://digital-land.github.io/">Digital Land</a>
+    </li>
+    
+  
+    
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="https://digital-land.github.io/guidance/">Guidance</a>
+    </li>
+    
+  
+    
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Finding the local authority for an address</li>
+    
+  
+  </ol>
+</div>
+
+
+
+
+        <main class="govuk-main-wrapper " id="main-content" role="main">
+          
+<div class="govuk-grid-row">
+ <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Finding the local authority for an address</h1>
+    <p class="govuk-body">This guidance is intended to help people building a government or other public service determine the local authority which an individual property or premises resides.</p>
+<h2 class="govuk-heading-l">Using the postcode</h2>
+<p class="govuk-body">The Office for National Statistics (ONS) publishes the National Statistics Postcode Lookup (<a href="https://geoportal.statistics.gov.uk/search?collection=Dataset&amp;sort=name&amp;tags=all(PRD_NSPL)">NSPL</a>) and ONS Postcode Directory (ONSPD) <a href="https://www.ons.gov.uk/methodology/geography/geographicalproducts/postcodeproducts">datasets</a>, which may be used to find a local authority district for a postcode when compiling statistics.</p>
+<p class="govuk-body">Similarly, Ordnance Survey (OS) publishes <a href="https://www.ordnancesurvey.co.uk/business-government/products/code-point-open">Code Point Open</a>, as open data, which is used in a number of third-party services such as <a href="https://mapit.mysociety.org/">Mapit</a> and <a href="https://findthatpostcode.uk/">Find that Postcode</a>.</p>
+<p class="govuk-body">Code Point Open and ONSPD find the centre point of the set of addresses with the same postcode, and place that within a single local authority boundary. Whereas NSPL matches the postcode centre point to a lower geography, and uses a hierarchy of geographies to assign the postcode to a local authority.</p>
+<p class="govuk-body">This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or <a href="https://github.com/digital-land/local-authority-postcodes/blob/master/report.md">1.2% of addresses</a> in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 550 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.</p>
+<p class="govuk-body">Sources such as ONSPD and NSUL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts. They are therefore unsuitable when you need to reliably find the local authority for an individual address.</p>
+<h2 class="govuk-heading-l">Asking the user to provide the local authority</h2>
+<p class="govuk-body">A service asking for information may ask the user to choose the local authority from a list of local authorities.</p>
+<p class="govuk-body">This approach puts more burden on the user, and does not work for many people or situations, such as when providing information about a different address to where they live. This approach is particularly unreliable where the address is close to a local authority boundary. In such cases the user will either need to search for the answer elsewhere. They will often resort to guessing.</p>
+<h2 class="govuk-heading-l">Use the UPRN</h2>
+<p class="govuk-body">To reliably direct a user to their local authority, or send data associated with a place to a local authority, you should use a gazetteer to find the <a href="https://www.gov.uk/government/publications/open-standards-for-government/identifying-property-and-street-information">Unique Property Reference Number (UPRN)</a> for the address. You can then use the gazetteer, or another dataset to find the local authority for the UPRN.</p>
+<h2 class="govuk-heading-m">Using a gazetteer</h3>
+<p class="govuk-body">Local authorities who have a statutory duty to number and name streets, maintain a <a href="https://en.wikipedia.org/wiki/Local_Land_and_Property_Gazetteer">Local Land and Property Gazetteer (LLPG)</a>. These are compiled by <a href="https://www.geoplace.co.uk/">GeoPlace LLP</a> into the National Land and Property Gazetteer (NLPG), which is marketed by OS as a suite of <a href="https://www.ordnancesurvey.co.uk/business-government/products/addressbase">AddressBase</a> products.</p>
+<p class="govuk-body">The data from one of the AddressBase products can be incorporated into your service, though this will require operational support as the data changes frequently, and is updated every 6 weeks. It is currently difficult to automate the process of ordering and updating a new copy of AddressBase data into a local database.</p>
+<p class="govuk-body">A service may be able to use <a href="https://developer.ordnancesurvey.co.uk/os-places-api">OS Places</a>, <a href="https://surreydigitalservices.github.io/sds-addresses/">Surrey Digital Services Address Lookup</a>, or one of the other APIs offered by companies on the Digital Marketplace. The privacy of the user and sensitivity of the addresses being looked-up should be considered when using a third-party API.</p>
+<h2 class="govuk-heading-m">Ask the user to select an address</h3>
+<p class="govuk-body">A service with a user interface should follow the <a href="https://design-system.service.gov.uk/patterns/addresses/">address lookup pattern</a> from the GOV.UK design system to help the user select an address from an address gazetteer.</p>
+<p class="govuk-body">A service asking a user for an address may have to resort to accepting lines of text for new-builds, and other places not yet listed in the gazetteer, in which case the text address will need to be matched by a separate, possibly manual process.</p>
+<p class="govuk-body"><em>Whilst we are aware of Geoplace LLP’s <a href="https://www.findmyaddress.co.uk/search">find my address</a> service, the <a href="https://developer.ordnancesurvey.co.uk/os-places-api">OS Places API</a>, and <a href="https://surreydigitalservices.github.io/sds-addresses/">Surrey Digital Services </a>service,  there is no single, accessible address platform similar to GOV.UK Notify or Pay, which be quickly and cheaply used in government services which we can recommend.</em></p>
+<h2 class="govuk-heading-m">Match a text address to a gazetteer</h3>
+<p class="govuk-body">Many historical datasets and registers contain text addresses without the UPRN. In such cases, each text address will need to be matched to the addresses in the gazetteer in order to find the corresponding UPRN.</p>
+<p class="govuk-body">A text address can be written in lots of different ways, with establishment, street, and place names often containing abbreviations, aliases, <a href="https://en.wikipedia.org/wiki/Exonym_and_endonym">exonyms, and endonyms</a>, all of which may change over time. These features, combined with typos and spelling mistakes make searching for an address in a gazetteer a relatively difficult task, subject to imprecision and error.</p>
+<h2 class="govuk-heading-m">Address matching precision</h3>
+<p class="govuk-body">Searching a gazetteer with an imprecise text address may return multiple entries. For example, a number of business units in a shopping centre, or all the residential flats in an apartment block may share the same postal delivery, or street address, but will each have a separate entry in the gazetteer with a different UPRN.</p>
+<p class="govuk-body">It is not necessary to have a precise match of an address to a UPRN if it is only being used to find the local authority. But if the UPRN is to be used as an identifier to link to other datasets, then there will be a proportion of text addresses which will be ambiguous and imprecise.</p>
+<h2 class="govuk-heading-m">Providing feedback on failed matches</h3>
+<p class="govuk-body">A service may require a manual process for dealing with failed matches, and possibly the ability to later contact the user, to resolve an issue with their address.</p>
+<p class="govuk-body">Missing addresses or other issues with the gazetteer should be reported back to the address custodian. Holders of a <a href="https://www.ordnancesurvey.co.uk/business-government/public-sector-geospatial-agreement">Public Sector Geospatial Agreement (PSGA)</a> or other OS account may use the <a href="https://www.ordnancesurvey.co.uk/tellos/">TellOS</a> form to report an issue with a UPRN.</p>
+<p class="govuk-body"><em>It is not clear how best to provide a custodian feedback on issues with lots of addresses at once.</em></p>
+<h2 class="govuk-heading-m">Bulk address matching services</h3>
+<p class="govuk-body">Matching large datasets to a gazetteer is a specialist activity, requiring clerical work to make decisions on ambiguous and unknown addresses. ONS, GeoPlace and a number of other <a href="https://www.digitalmarketplace.service.gov.uk/g-cloud/search">companies listed on G-Cloud</a> offer services to help match text addresses in bulk datasets.</p>
+<h2 class="govuk-heading-m">Find the local authority district from the UPRN</h3>
+<p class="govuk-body">ONS periodically publishes a <a href="https://geoportal.statistics.gov.uk/datasets/national-statistics-uprn-lookup-march-2020">National Statistics UPRN Lookup (NSUL)</a> dataset, a set of CSV files which can be used to translate a UPRN to various statistical geography codes, including the local authority district (LAD).</p>
+<p class="govuk-body">Alternatively, use AddressBase to find the custodian for the UPRN. <a href="https://digital-land.github.io/organisation/">The Digital Land organisation dataset</a> has a mapping to find the organisation, and Local Authority District from the AddressBase custodian code.</p>
+<h2 class="govuk-heading-l">Finding the organisation, forum or hub for a local authority district</h2>
+<p class="govuk-body">The LAD code identifies the jurisdiction of the local authority. A new code is issued when the boundary changes.</p>
+<p class="govuk-body">Digital Land provides a translation from the AddressBase custodian, and LAD code to GOV.UK <a href="https://www.registers.service.gov.uk/registers/local-authority-eng">local-authority-eng</a> register identifier and other datasets on the Digital Land <a href="https://digital-land.github.io/organisation/">organisation</a> pages.</p>
+  </div>
+</div>
+
+        </main>
+      </div>
+    
+
+    
+      <footer class="govuk-footer " role="contentinfo"
+        >
+  <div class="govuk-width-container ">
+    
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        
+        <svg
+          role="presentation"
+          focusable="false"
+          class="govuk-footer__licence-logo"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 483.2 195.7"
+          height="17"
+          width="41"
+        >
+          <path
+            fill="currentColor"
+            d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+          />
+        </svg>
+        <span class="govuk-footer__licence-description">
+          All content is available under the
+          <a
+            class="govuk-footer__link"
+            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+            rel="license"
+          >Open Government Licence v3.0</a>, except where otherwise stated
+        </span>
+      </div>
+      <div class="govuk-footer__meta-item">
+        <a
+          class="govuk-footer__link govuk-footer__copyright-logo"
+          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+        >© Crown copyright</a>
+      </div>
+    </div>
+  </div>
+</footer>
+    
+
+    
+<script src="/static/javascripts/govuk/govuk-frontend-3.0.0.min.js"></script>
+<script>
+	// initiate all GOVUK components
+	window.GOVUKFrontend.initAll();
+</script>
+
+  </body>
+</html>
