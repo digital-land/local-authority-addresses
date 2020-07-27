@@ -24,7 +24,7 @@ Sources such as ONSPD and NSUL are designed for grouping data containing address
 
 A service asking for information may ask the user to choose the local authority from a list of local authorities.
 
-This approach places a burden on the user, and does not work well for many people or in many situations. Asking for the local authority is particularly difficult for a user providing information about an address which is different to where they live, or the address is close the local authority boundary. In such cases the user will either need to search for the information, or resort to guessing.
+This approach places a burden on the user, and does not work well for many people in many situations. Asking for the local authority is may be difficult for a user providing information about different place to where they live, or an place close a local authority boundary. In such cases the user will either need to search for the information, or resort to guessing.
 
 
 ## Use the UPRN
