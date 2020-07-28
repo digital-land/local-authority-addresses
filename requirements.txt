@@ -1,3 +1,6 @@
+notebook==6.0.3
+datasette==0.42
+datasette-cluster-map==0.10
 csvkit==1.0.5
 markdown==3.2.2
 frontmatter==3.0.7

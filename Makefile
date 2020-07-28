@@ -1,8 +1,9 @@
 .PHONY: init data report docs clean clobber prune
 .DELETE_ON_ERROR:
 
-# sources
+# data sources
 ORGANISATION_CSV=var/organisation.csv
+LAD_BOUNDARIES_GEOJSON=var/lad-boundaries.geojson
 AddressBase_ZIP=cache/AB76GB_CSV.zip
 AddressBase_HEADERS_CSV=cache/addressbase-premium-header-files.zip
 AddressBase_CUSTODIANS_ZIP=cache/addressbase-local-custodian-codes.zip
@@ -10,7 +11,6 @@ CODEPO_ZIP=cache/codepo_gb.zip
 ONSPD_ZIP=cache/ONSPD_MAY_2020_UK.zip
 ONSUD_ZIP=cache/ONSUD_MAY_2020.zip
 NSPL_ZIP=cache/NSPL_MAY_2020_UK.zip
-OPENUPRN_ZIP=cache/OPENUPRN_2020_06.zip
 
 DOWNLOADS=\
 	$(ORGANISATION_CSV)\
@@ -20,7 +20,6 @@ DOWNLOADS=\
 	$(ONSPD_ZIP)\
 	$(ONSUD_ZIP)\
 	$(NSPL_ZIP)\
-	$(OPENUPRN_ZIP)\
 	$(CODEPO_ZIP)
 
 AddressBase_DATA=\
@@ -47,7 +46,6 @@ DATA=\
 VAR=\
 	$(AddressBase_DATA)\
 	var/organisation.csv\
-	var/organisation.csv\
 	var/osopenuprn.csv\
 	var/codepo.csv\
 	var/nspl.csv\
@@ -60,82 +58,40 @@ VAR=\
 	var/postcode-lad-uprn-count.csv\
 	var/postcode-lad-count.csv
 
-all:	data report docs
+all:	docs data
 
+#
+#  published pages
+#
 docs:	docs/index.html
 
 docs/index.html:	bin/render.py templates/guidance.html content/guidance.md
 	@mkdir -p docs/
 	python3 bin/render.py
 
-report:	report.md
+data:	addresses.db
 
-report.md:	data/totals.json bin/report.py
-	python3 bin/report.py < data/totals.json > $@
+addresses.db:	var/organisation.csv var/postcode.csv var/uprn.csv
 
-data:	$(DATA)
+# postcode table:
+# postcode,codepo,onspd,nspl
+var/postcode.csv:	var/nspl.csv var/onspd.csv var/codepo.csv bin/postcode.py
+	python3 bin/postcode.py | bin/csvsort.sh -t, -k1.1 -k2.2> $@
 
-# working data index
-var/README.md:	$(VAR) bin/index.sh
-	bin/index.sh $(VAR) > $@
-
-# totals 
-data/totals.json:	var/postcode-uprn.csv bin/totals.py
-	time python3 bin/totals.py var/totals.csv > $@
-
-### counts
-
-# count of UPRNs for custodian/LAD combinations
-# addressbase-custodian,onsud,onspd,count
-var/custodian-lad-count.csv:	var/postcode-uprn.csv
-	{ COLS="addressbase-custodian,onsud,onspd" ; echo "$$COLS,count"; csvcut -c "$$COLS" | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\2,\1/' ; } <$< > $@
-
-# count of LADs for each postcode
-var/postcode-lad-count.csv:	var/postcode-uprn-count.csv
-	{ echo "count,postcode" ; csvcut -c postcode | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\1,\2/' | sort -rn ; } < $< > $@
-
-# count of UPRNs for each postcode
-# count,postcode
-var/postcode-uprn-count.csv:	var/postcode-uprn.csv
-	{ echo "count,postcode" ; csvcut -c postcode | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\1,\2/' | sort -rn ; } < $< > $@
-
-# count of UPRNs for LAD combinations
-#postcode,onspd,onsud,count
-var/postcode-lad-uprn-count.csv:	var/postcode-uprn.csv
-	{ COLS="postcode,onspd,onsud"; echo "$$COLS,count"; csvcut -c "$$COLS" | sed 1d | sort | uniq -c | sed 's/^ *\([0-9][0-9]*\)  *\(.*$$\)/\2,\1/' ; }< $< > $@
-
-#
-# index of UPRNs by postcode with de-normalised postcode assigned LADs
-# postcode,uprn,addressbase-custodian,onsud,codepo,onspd,nspl
-var/postcode-uprn.csv:	var/postcode-blpu.csv var/postcode.csv
-	join --header -t, -1 1 -2 1 var/postcode-blpu.csv var/postcode.csv > $@
-
-## pipeline
-
-# BLPUs merged with ONSUD, ordered by postcode
+# uprn table:
 # uprn,postcode,addressbase-custodian,onsud
-var/postcode-blpu.csv:	var/blpu-onsud.csv
-	csvcut -c postcode,uprn,addressbase-custodian,onsud var/blpu-onsud.csv | bin/csvsort.sh -t, -k1,1 > $@
-
-# BLPUs merged with ONSUD
-# uprn,postcode,addressbase-custodian,onsud
-var/blpu-onsud.csv:	var/blpu.csv var/onsud.csv
+var/uprn.csv:	var/blpu.csv var/onsud.csv
 	join --header -t, -1 1 -2 1 var/blpu.csv var/onsud.csv > $@
 
-# list of BLPUs
+# cleaned up AddressBase BLPU table:
 # uprn,postcode,addressbase-custodian
-var/blpu.csv:	var/AddressBase/BLPU.csv
-	csvcut -c "UPRN,POSTCODE_LOCATOR,LOCAL_CUSTODIAN_CODE" var/AddressBase/BLPU.csv | sed 1d | { echo "uprn,postcode,addressbase-custodian" ; sort -k1,1 -t, ; }
+var/blpu.csv:	var/AddressBase/BLPU.csv bin/uprn.sh
+	bin/uprn.sh < var/AddressBase/BLPU.csv > $@
 
 # unpack AddressBase into a file for each record type
 $(AddressBase_DATA):	 bin/unpack-addressbase.py $(AddressBase_ZIP) $(AddressBase_HEADERS_CSV)
 	@mkdir -p var/AddressBase/
 	python3 bin/unpack-addressbase.py $(AddressBase_HEADERS_CSV) $(AddressBase_ZIP)
-
-# list of postcodes
-# postcode,codepo,onspd,nspl
-var/postcode.csv:	var/nspl.csv var/onspd.csv var/codepo.csv bin/postcode.py
-	python3 bin/postcode.py | bin/csvsort.sh -t, -k1.1 -k2.2> $@
 
 var/nspl.csv:	$(NSPL_ZIP)
 	@mkdir -p var/
@@ -153,11 +109,9 @@ var/codepo.csv:	$(CODEPO_ZIP)
 	@mkdir -p var/
 	unzip -p $(CODEPO_ZIP) 'Data/CSV/*.csv' | csvcut -c 1,3,4,9 | sed -e '1i postcode,easting,northing,codepo' > $@
 
-# OS published CSV file contains an invalid BOM
-var/osopenuprn.csv:	$(OPENUPRN_ZIP)
-	@mkdir -p var/
-	unzip -p $(OPENUPRN_ZIP) '*.csv' | sed '1s/^\xEF\xBB\xBF//' | csvcut -c UPRN,LATITUDE,LONGITUDE | sed -e '1{s/UPRN,LATITUDE,LONGITUDE/uprn,latitude,longitude/}' > $@
-
+#
+#  downloads
+#
 download: $(DOWNLOADS)
 
 # https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-may-2020
@@ -190,14 +144,22 @@ $(AddressBase_CUSTODIANS_ZIP):
 	@mkdir -p ./cache
 	curl -qsL 'https://www.ordnancesurvey.co.uk/documents/product-support/support/addressbase-local-custodian-codes.zip' > $@
 
+# https://geoportal.statistics.gov.uk/datasets/local-authority-districts-december-2019-boundaries-uk-bfc
+$(LAD_BOUNDARIES_GEOJSON):
+	@mkdir -p ./cache
+	curl -qsL 'https://opendata.arcgis.com/datasets/1d78d47c87df4212b79fe2323aae8e08_0.geojson' > $@
+
 $(CODEPO_ZIP):
 	@mkdir -p ./cache
 	curl -qsL 'https://api.os.uk/downloads/v1/products/CodePointOpen/downloads?area=GB&format=CSV&redirect' > $@
 
 $(ORGANISATION_CSV):
-	@mkdir -p ./data
+	@mkdir -p ./var
 	curl -qsL 'https://raw.githubusercontent.com/digital-land/organisation-dataset/master/collection/organisation.csv' > $@
 
+#
+#  standard targets
+#
 init:
 	pip3 install -r requirements.txt
 

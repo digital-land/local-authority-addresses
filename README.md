@@ -2,12 +2,7 @@
 
 [Guidance](https://digital-land.github.io/local-authority-addresses) to help people building a government or other public service determine the local authority which an individual property or premises resides.
 
-This repository also includes [Analysis](https://digital-land.github.io/local-authority-addresses/analysis)) of 
-
-  * 1.2% of addresses are in a Local Authority District which is different to the postcode in ONSPD.
-  * 1% of postcodes in England overlap a local authority boundary, affecting % of addresses.
-  * POSTCODE has addresses with the largest number of different custodians (LA1, LA2, ..)
-  * POSTCODE has the largest number of addresses differing to ONSPD (X in LA1, Y in LA2)
+This repository also includes [Analysis](https://digital-land.github.io/local-authority-addresses/analysis)) as a Jupyter notebook.
 
 # Data sources
 
@@ -28,7 +23,7 @@ AddressBase is used to find the postcode for an individual UPRN.
 
 NSPL and ONSPD both assign a single local authority district to a postcode, the difference being [the method used](https://www.ons.gov.uk/methodology/geography/geographicalproducts/postcodeproducts) to relate a postcode to a local authority. ONSPD uses a geospatial method to match a central location for the postcode within the local authority district boundary, whilst NSPL ensures statistics are consistent in their geographical hierarchy.
 
-# Building the report
+# Building the guidance and report
 
 We recommend working in [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) before installing the python dependencies:
 
