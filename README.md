@@ -2,7 +2,13 @@
 
 [Guidance](https://digital-land.github.io/local-authority-addresses) to help people building a government or other public service determine the local authority which an individual property or premises resides.
 
-This repository also includes [Analysis](https://digital-land.github.io/local-authority-addresses/analysis)) as a Jupyter notebook.
+This repository also includes [analysis](https://digital-land.github.io/local-authority-addresses/analysis)) of English UPRNs, local authority districts, and postcodes.
+
+The analysis uses a [spatialite](https://www.gaia-gis.it/fossil/libspatialite/index) database, built from the proprietary OS AddressBase Premium dataset combined with a number of open data sources.
+
+<a href="https://www.flickr.com/photos/psd/50165771136/in/dateposted-public/" title="Spatialite schema"><img src="https://live.staticflickr.com/65535/50165771136_255fe99b5b_c.jpg" alt="Spatialite schema"></a>
+
+The database can be explored using [datasette](https://datasette.readthedocs.io/en/stable/). There is a set of example queries in the accompanying Jupyter notebook.
 
 # Data sources
 
@@ -17,13 +23,7 @@ AddressBase has to be ordered and manually downloaded from the OS data portal, a
 
   * [OS AddressBase Premium](https://www.ordnancesurvey.co.uk/business-government/products/addressbase-premium)
 
-# Methodology
-
-AddressBase is used to find the postcode for an individual UPRN.
-
-NSPL and ONSPD both assign a single local authority district to a postcode, the difference being [the method used](https://www.ons.gov.uk/methodology/geography/geographicalproducts/postcodeproducts) to relate a postcode to a local authority. ONSPD uses a geospatial method to match a central location for the postcode within the local authority district boundary, whilst NSPL ensures statistics are consistent in their geographical hierarchy.
-
-# Building the guidance and report
+# Building the guidance and database
 
 We recommend working in [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) before installing the python dependencies:
 

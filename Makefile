@@ -1,4 +1,4 @@
-.PHONY: init data report docs clean clobber prune
+.PHONY: init docs clean clobber prune
 .DELETE_ON_ERROR:
 export SPATIALITE_EXTENSION:=/usr/lib/x86_64-linux-gnu/mod_spatialite.so
 
@@ -6,7 +6,6 @@ DB=addresses.db
 
 # data sources
 ORGANISATION_CSV=var/organisation.csv
-LAD_BOUNDARIES_GEOJSON=var/lad-boundaries.geojson
 AddressBase_ZIP=cache/AB76GB_CSV.zip
 AddressBase_HEADERS_CSV=cache/addressbase-premium-header-files.zip
 AddressBase_CUSTODIANS_ZIP=cache/addressbase-local-custodian-codes.zip
@@ -14,8 +13,8 @@ CODEPO_ZIP=cache/codepo_gb.zip
 ONSPD_ZIP=cache/ONSPD_MAY_2020_UK.zip
 ONSUD_ZIP=cache/ONSUD_MAY_2020.zip
 NSPL_ZIP=cache/NSPL_MAY_2020_UK.zip
-LAD19_CSV=cache/LAD_DEC_2019_UK.csv
-LAD20_CSV=cache/LAD_APRIL_2020_UK.csv
+LAD19_GEOJSON=var/lad19.geojson
+LAD20_GEOJSON=var/lad20.geojson
 
 AddressBase_DATA=\
 	var/AddressBase/BLPU.csv\
@@ -32,18 +31,22 @@ AddressBase_DATA=\
 	var/AddressBase/XREF.csv
 
 DB_DATA=\
-	var/geography.csv\
 	var/addressbase-custodian.csv\
 	var/organisation.csv\
 	var/postcode.csv\
-	var/uprn.csv
+	var/uprn.csv\
+	$(LAD19_GEOJSON)\
+	$(LAD20_GEOJSON)
 
 
 all:	docs data
 
 serve:	$(DB)
-	datasette serve $(DB) --config sql_time_limit_ms:10000 --load-extension=$(SPATIALITE_EXTENSION)
-
+	datasette serve $(DB) \
+	--config sql_time_limit_ms:10000 \
+	--load-extension $(SPATIALITE_EXTENSION) \
+	--metadata datasette/metadata.json \
+	--template-dir datasette/templates/
 
 #
 #  published pages
@@ -109,17 +112,6 @@ var/addressbase-custodian.csv:	$(AddressBase_CUSTODIANS_ZIP)
 	@mkdir -p var/
 	unzip -p $(AddressBase_CUSTODIANS_ZIP) '*.csv' | csvcut -c "Local Custodian Code,Authority" | sed -e '1{s/^Local.*$$/addressbase-custodian,name/}' -e '1!{/^.Local Custodian/d;}' | bin/csvsort.sh -u -t, -k1,1 > $@
 
-#
-#  ONS local authority district codes
-#
-var/geography.csv:	var/lad20.csv var/lad19.csv
-	csvjoin -c geography,name  --left var/lad19.csv var/lad20.csv | csvcut -c geography,name > $@
-
-var/lad20.csv:	$(LAD20_CSV)
-	 cat $(LAD20_CSV) | csvcut -c "LAD20CD,LAD20NM" | sed -e '1{s/^.*$$/geography,name/}' | bin/csvsort.sh -u > $@
-
-var/lad19.csv:	$(LAD19_CSV)
-	 cat $(LAD19_CSV) | csvcut -c "LAD19CD,LAD19NM" | sed -e '1{s/^.*$$/geography,name/}' | bin/csvsort.sh -u > $@
 
 #
 #  downloads
@@ -141,20 +133,15 @@ $(NSPL_ZIP):
 	@mkdir -p ./cache
 	curl -qsL 'https://www.arcgis.com/sharing/rest/content/items/ab73ec2e38c04599b64b09b3fa1c3333/data' > $@
 
-# https://geoportal.statistics.gov.uk/datasets/local-authority-districts-april-2020-names-and-codes-in-the-united-kingdom
-$(LAD20_CSV):
+# https://geoportal.statistics.gov.uk/datasets/local-authority-districts-may-2020-boundaries-uk-bgc
+$(LAD20_GEOJSON):
 	@mkdir -p ./cache
-	curl -qsL 'https://opendata.arcgis.com/datasets/fe6bcee87d95476abc84e194fe088abb_0.csv' > $@
+	curl -qsL 'https://opendata.arcgis.com/datasets/54b65ffb42c2480b88a20899aff750de_0.geojson' > $@
 
-# https://geoportal.statistics.gov.uk/datasets/local-authority-districts-december-2019-names-and-codes-in-the-united-kingdom
-$(LAD19_CSV):
+# https://geoportal.statistics.gov.uk/datasets/local-authority-districts-december-2019-boundaries-uk-bgc 
+$(LAD19_GEOJSON):
 	@mkdir -p ./cache
-	curl -qsL 'https://opendata.arcgis.com/datasets/35de30c6778b463a8305939216656132_0.csv' > $@
-
-# https://osdatahub.os.uk/downloads/open/OpenUPRN
-$(OPENUPRN_ZIP):
-	@mkdir -p ./cache
-	curl -qsL 'https://api.os.uk/downloads/v1/products/OpenUPRN/downloads?area=GB&format=CSV&redirect' > $@
+	curl -qsL 'https://opendata.arcgis.com/datasets/0e07a8196454415eab18c40a54dfbbef_0.geojson' > $@
 
 # https://www.ordnancesurvey.co.uk/business-government/tools-support/addressbase-premium-support
 $(AddressBase_HEADERS_CSV):
@@ -165,11 +152,6 @@ $(AddressBase_HEADERS_CSV):
 $(AddressBase_CUSTODIANS_ZIP):
 	@mkdir -p ./cache
 	curl -qsL 'https://www.ordnancesurvey.co.uk/documents/product-support/support/addressbase-local-custodian-codes.zip' > $@
-
-# https://geoportal.statistics.gov.uk/datasets/local-authority-districts-december-2019-boundaries-uk-bfc
-$(LAD_BOUNDARIES_GEOJSON):
-	@mkdir -p ./cache
-	curl -qsL 'https://opendata.arcgis.com/datasets/1d78d47c87df4212b79fe2323aae8e08_0.geojson' > $@
 
 $(CODEPO_ZIP):
 	@mkdir -p ./cache
@@ -186,7 +168,7 @@ init:
 	pip3 install -r requirements.txt
 
 clobber:
-	rm -rf ./doc/ ./data/
+	rm -rf ./doc/
 
 clean:	clobber
 	rm -rf ./var

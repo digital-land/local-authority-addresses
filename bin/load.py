@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 # create a spatialite database for analysing local authority addresses
-# - TBD: move to use simonw's tools
 
 import os
 import sys
 import csv
 import sqlite3
+import json
+from shapely.geometry.multipolygon import MultiPolygon
+from shapely.geometry import shape
 
 
 def open_connection(path):
@@ -14,11 +16,7 @@ def open_connection(path):
 
     # SpatialLite extension
     connection.enable_load_extension(True)
-    connection.load_extension(
-        os.environ.get(
-            "SPATIALITE_EXTENSION", "/usr/lib/x86_64-linux-gnu/mod_spatialite.so"
-        )
-    )
+    connection.load_extension(os.environ["SPATIALITE_EXTENSION"])
     connection.execute("select InitSpatialMetadata(1)")
     return connection
 
@@ -32,6 +30,10 @@ def create_tables(connection):
         );
         """
     )
+    connection.execute(
+        "SELECT AddGeometryColumn('geography', 'geometry', 4326, 'MULTIPOLYGON', 2);"
+    )
+    connection.execute("SELECT CreateSpatialIndex('geography', 'geometry');")
 
     connection.execute(
         """
@@ -63,8 +65,6 @@ def create_tables(connection):
             codepo TEXT,
             onspd TEXT,
             nspl TEXT,
-            longitude REAL,
-            latitude REAL,
 
             FOREIGN KEY (codepo) REFERENCES geography (geography),
             FOREIGN KEY (onspd) REFERENCES geography (geography),
@@ -78,8 +78,6 @@ def create_tables(connection):
             uprn INTEGER PRIMARY KEY,
             postcode TEXT,
             custodian INTEGER,
-            longitude REAL,
-            latitude REAL,
             onsud TEXT,
 
             FOREIGN KEY (postcode) REFERENCES postcode (postcode),
@@ -87,8 +85,8 @@ def create_tables(connection):
             FOREIGN KEY (onsud) REFERENCES geography (geography)
         );"""
     )
-
     connection.execute("SELECT AddGeometryColumn('uprn', 'point', 4326, 'POINT', 2);")
+    connection.execute("SELECT CreateSpatialIndex('uprn', 'point');")
 
 
 def create_cursor(connection):
@@ -103,19 +101,23 @@ def commit(connection):
     connection.commit()
 
 
-def load_geography(cursor, path):
+def load_geojson(cursor, path, geography, name):
     print("loading %s" % path)
-    for row in csv.DictReader(open(path, newline="")):
-        cursor.execute(
-            """
-            INSERT INTO geography(geography, name)
-            VALUES ("%s", "%s");
-            """
-            % (
-                row["geography"],
-                row["name"]
+    for line in open(path):
+        if line.startswith('{ "type":'):
+            line = line.rstrip("\n").rstrip(",")
+            geojson = json.loads(line.rstrip(","))
+            properties = geojson["properties"]
+            wkt = shape(geojson["geometry"]).wkt
+
+            cursor.execute(
+                """
+                INSERT OR IGNORE INTO geography(geography, name, geometry)
+                VALUES(?, ?, CastToMultiPolygon(GeomFromText(?, 4326)))
+                """,
+                (properties[geography], properties[name], wkt),
             )
-        )
+
 
 def load_custodian(cursor, path):
     print("loading %s" % path)
@@ -125,11 +127,9 @@ def load_custodian(cursor, path):
             INSERT INTO custodian(custodian, name)
             VALUES ("%s", "%s");
             """
-            % (
-                row["addressbase-custodian"],
-                row["name"]
-            )
+            % (row["addressbase-custodian"], row["name"])
         )
+
 
 def load_organisation(cursor, path):
     print("loading %s" % path)
@@ -156,12 +156,7 @@ def load_postcode(cursor, path):
             INSERT INTO postcode(postcode, codepo, onspd, nspl)
             VALUES ("%s", "%s", "%s", "%s");
             """
-            % (
-                row["postcode"],
-                row["codepo"],
-                row["onspd"],
-                row["nspl"],
-            )
+            % (row["postcode"], row["codepo"], row["onspd"], row["nspl"],)
         )
 
 
@@ -170,19 +165,17 @@ def load_blpu(cursor, path):
     for row in csv.DictReader(open(path, newline="")):
         cursor.execute(
             """
-            INSERT INTO uprn(uprn, postcode, custodian, onsud, longitude, latitude)
-            VALUES ("%s", "%s", "%s", "%s", "%s", "%s");
-            """
-            % (
+            INSERT INTO uprn(uprn, postcode, custodian, onsud, point)
+            VALUES (?, ?, ?, ?, GeomFromText(?, 4326));
+            """,
+            (
                 row["uprn"],
                 row["postcode"],
                 row["addressbase-custodian"],
                 row["onsud"],
-                row["longitude"],
-                row["latitude"],
-            )
+                "POINT(%s %s)" % (row["longitude"], row["latitude"]),
+            ),
         )
-
 
 
 if __name__ == "__main__":
@@ -192,7 +185,8 @@ if __name__ == "__main__":
     create_tables(connection)
     cursor = create_cursor(connection)
 
-    load_geography(cursor, "var/geography.csv")
+    load_geojson(cursor, "var/lad20.geojson", "lad20cd", "lad20nm")
+    load_geojson(cursor, "var/lad19.geojson", "lad19cd", "lad19nm")
     commit(connection)
 
     load_custodian(cursor, "var/addressbase-custodian.csv")
@@ -204,8 +198,13 @@ if __name__ == "__main__":
     load_postcode(cursor, "var/postcode.csv")
     commit(connection)
 
-    # load_blpu(cursor, "var/AddressBase/BLPU.csv")
-    load_blpu(cursor, "tmp/uprn.csv")
+    load_blpu(cursor, "var/uprn.csv")
     commit(connection)
 
+    print("creating uprn index ..")
+    connection.execute(
+        "CREATE INDEX IF NOT EXISTS uprn_index on uprn (uprn, postcode, custodian, onsud);"
+    )
+
+    commit(connection)
     connection.close()

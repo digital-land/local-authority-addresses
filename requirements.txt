@@ -1,6 +1,9 @@
 notebook==6.0.3
-datasette==0.42
+datasette==0.45
 datasette-cluster-map==0.10
+datasette-leaflet-geojson==0.4
+Shapely==1.7.0
+geometry-to-spatialite==0.3.1
 csvkit==1.0.5
 markdown==3.2.2
 frontmatter==3.0.7
