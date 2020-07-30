@@ -2,24 +2,20 @@
 
 [Guidance](https://digital-land.github.io/local-authority-addresses) to help people building a government or other public service determine the local authority which an individual property or premises resides.
 
-This repository also includes some [analysis](https://digital-land.github.io/local-authority-addresses/analysis) of English UPRNs, local authority districts, and postcodes which was developed to inform the guidance.
-
-The analysis uses a [spatialite](https://www.gaia-gis.it/fossil/libspatialite/index) database, built from the proprietary OS AddressBase Premium dataset combined with a number of open data sources.
+The guidance was informed by an [analysis](https://digital-land.github.io/local-authority-addresses/analysis) of addresses in England
+using a [spatialite](https://www.gaia-gis.it/fossil/libspatialite/index) database which may be explored using the accompanying [datasette](https://datasette.readthedocs.io/en/stable/) server and [Jupyter](https://jupyter.org/) notebook.
 
 <a href="https://www.flickr.com/photos/psd/50165771136/in/dateposted-public/" title="Spatialite schema"><img src="https://live.staticflickr.com/65535/50165771136_255fe99b5b_c.jpg" alt="Spatialite schema"></a>
 
-The database can be explored using [datasette](https://datasette.readthedocs.io/en/stable/). There is a set of example queries in the accompanying Jupyter notebook.
-
 # Data sources
 
-The following data sources are downloaded by the build process:
+The following data sources are downloaded by the [build](Makefile) process:
 
   * [ONS National Statistics Postcode Lookup (ONSNSPL)](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=name&tags=all(PRD_NSPL))
   * [ONS Postcode Directory (ONSPD)](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=name&tags=all(PRD_ONSPD))
   * [ONS UPRN Directory (UD)](https://geoportal.statistics.gov.uk/search?collection=Dataset&sort=name&tags=all(PRD_ONSUD))
-  * [OS OpenUPRN](https://osdatahub.os.uk/downloads/open/OpenUPRN)
 
-AddressBase has to be ordered and manually downloaded from the OS data portal, and a copy saved in the cache directory:
+The proprietary AddressBase dataset, has to be ordered and downloaded manually from the OS data portal:
 
   * [OS AddressBase Premium](https://www.ordnancesurvey.co.uk/business-government/products/addressbase-premium)
 
