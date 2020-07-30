@@ -103,6 +103,8 @@ def commit(connection):
 
 def load_geojson(cursor, path, geography, name):
     print("loading %s" % path)
+
+    # ONS shapefiles served by ESRI are JSONL-like, with one feature per-line
     for line in open(path):
         if line.startswith('{ "type":'):
             line = line.rstrip("\n").rstrip(",")
@@ -205,6 +207,6 @@ if __name__ == "__main__":
     connection.execute(
         "CREATE INDEX IF NOT EXISTS uprn_index on uprn (uprn, postcode, custodian, onsud);"
     )
-
     commit(connection)
+
     connection.close()
