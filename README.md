@@ -2,7 +2,7 @@
 
 [Guidance](https://digital-land.github.io/local-authority-addresses) to help people building a government or other public service determine the local authority which an individual property or premises resides.
 
-This repository also includes [analysis](https://digital-land.github.io/local-authority-addresses/analysis)) of English UPRNs, local authority districts, and postcodes.
+This repository also includes some [analysis](https://digital-land.github.io/local-authority-addresses/analysis) of English UPRNs, local authority districts, and postcodes which was developed to inform the guidance.
 
 The analysis uses a [spatialite](https://www.gaia-gis.it/fossil/libspatialite/index) database, built from the proprietary OS AddressBase Premium dataset combined with a number of open data sources.
 
@@ -29,6 +29,15 @@ We recommend working in [virtual environment](http://docs.python-guide.org/en/la
 
     $ make init
     $ make
+
+Downloading the data and building the database and indexes can take more than an hour on an modern laptop.
+To just build the guidance and content:
+
+    $ make docs
+
+You can explore the data in a browser using datasette:
+
+    $ make serve
 
 # Licence
 
