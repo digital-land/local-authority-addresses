@@ -1,6 +1,8 @@
 {% extends "dlf-base.html" %}
 {% from "govuk-jinja-components/breadcrumbs/macro.jinja" import govukBreadcrumbs %}
 
+{% block pageTitle %}{{ title }} | Digital Land{% endblock %}
+
 {% block dl_breadcrumbs %}
 
   {{ govukBreadcrumbs({
