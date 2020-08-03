@@ -47,7 +47,7 @@ A service with a user interface should follow the [address lookup pattern](https
 
 A service asking a user for an address may have to resort to accepting lines of text for new-builds, and other places not yet listed in the gazetteer, in which case the text address will need to be matched by a separate, possibly manual process.
 
-_Whilst we are aware of Geoplace LLP’s [find my address](https://www.findmyaddress.co.uk/search) service, the [OS Places API](https://developer.ordnancesurvey.co.uk/os-places-api), and [Surrey Digital Services ](https://surreydigitalservices.github.io/sds-addresses/)service,  there is no single, accessible address platform similar to GOV.UK Notify or Pay, which be quickly and cheaply used in government services which we can recommend._
+_There is no single, accessible address platform similar to GOV.UK Notify or Pay, which be quickly and cheaply used in any government service which we can currently recommend._
 
 
 ### Match a text address to a gazetteer
