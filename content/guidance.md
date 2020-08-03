@@ -17,7 +17,7 @@ Code Point Open and ONSPD find the centre point of the set of addresses with the
 
 This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or [1.2% of addresses](https://github.com/digital-land/local-authority-postcodes/blob/master/report.md) in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 550 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.
 
-Sources such as ONSPD and NSUL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts.
+Sources such as ONSPD and NSPL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts.
 
 
 ## Asking the user to provide the local authority
@@ -80,7 +80,7 @@ Matching large datasets to a gazetteer is a specialist activity, requiring cleri
 
 ### Find the local authority district from the UPRN
 
-ONS periodically publishes a [National Statistics UPRN Lookup (NSUL)](https://geoportal.statistics.gov.uk/datasets/national-statistics-uprn-lookup-march-2020) dataset, a set of CSV files which can be used to translate a UPRN to various statistical geography codes, including the local authority district (LAD).
+ONS periodically publishes a [National Statistics UPRN Lookup (NSPL)](https://geoportal.statistics.gov.uk/datasets/national-statistics-uprn-lookup-march-2020) dataset, a set of CSV files which can be used to translate a UPRN to various statistical geography codes, including the local authority district (LAD).
 
 Alternatively, use AddressBase to find the custodian for the UPRN. [The Digital Land organisation dataset](https://digital-land.github.io/organisation/) has a mapping to find the organisation, and Local Authority District from the AddressBase custodian code.
 
