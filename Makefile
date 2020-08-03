@@ -43,7 +43,7 @@ all:	docs data
 
 serve:	$(DB)
 	datasette serve $(DB) \
-	--config sql_time_limit_ms:10000 \
+	--config sql_time_limit_ms:50000 \
 	--load-extension $(SPATIALITE_EXTENSION) \
 	--metadata datasette/metadata.json \
 	--template-dir datasette/templates/
