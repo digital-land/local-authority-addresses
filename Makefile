@@ -41,21 +41,36 @@ DB_DATA=\
 
 all:	docs data
 
-serve:	$(DB)
+#
+#  exploration ..
+#
+
+# datasette server
+datasette:	$(DB)
 	datasette serve $(DB) \
 	--config sql_time_limit_ms:50000 \
 	--load-extension $(SPATIALITE_EXTENSION) \
 	--metadata datasette/metadata.json \
 	--template-dir datasette/templates/
 
+# notebook server
+notebook:	$(DB)
+	jupyter notebook
+
+
 #
 #  published pages
 #
-docs:	docs/index.html
+docs:	docs/index.html docs/analysis/index.html
 
 docs/index.html:	bin/render.py templates/guidance.html content/guidance.md
 	@mkdir -p docs/
 	python3 bin/render.py
+
+# to include maps set notebook with "Widgets" -> "Save Widget State"
+docs/analysis/index.html:	local-authority-addresses.ipynb
+	@mkdir -p docs/analysis
+	jupyter nbconvert local-authority-addresses.ipynb --to html --output $@
 
 data:	addresses.db
 

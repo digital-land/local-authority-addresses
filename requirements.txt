@@ -2,6 +2,7 @@ notebook==6.0.3
 datasette==0.45
 datasette-cluster-map==0.10
 datasette-leaflet-geojson==0.4
+ipyleaflet==0.13.3
 matplotlib==3.3.0
 notebook==6.0.3
 Shapely==1.7.0
