@@ -15,7 +15,7 @@ Similarly, Ordnance Survey (OS) publishes [Code Point Open](https://www.ordnance
 
 Code Point Open and ONSPD find the centre point of the set of addresses with the same postcode, and place that within a single local authority boundary. Whereas NSPL matches the postcode centre point to a lower geography, and uses a hierarchy of geographies to assign the postcode to a local authority.
 
-This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or [1.2% of addresses](https://github.com/digital-land/local-authority-postcodes/blob/master/report.md) in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 550 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.
+This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or [1.2% of addresses](https://digital-land.github.io/local-authority-addresses/analysis/) in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 550 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.
 
 Sources such as ONSPD and NSPL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts.
 
