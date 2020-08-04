@@ -15,7 +15,7 @@ Similarly, Ordnance Survey (OS) publishes [Code Point Open](https://www.ordnance
 
 Code Point Open and ONSPD find the centre point of the set of addresses with the same postcode, and place that within a single local authority boundary. Whereas NSPL matches the postcode centre point to a lower geography, and uses a hierarchy of geographies to assign the postcode to a local authority.
 
-This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or [1.2% of addresses](https://digital-land.github.io/local-authority-addresses/analysis/) in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 550 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.
+This means that each postcode is assigned a single local authority. Unfortunately, nearly 387,000 or [1.2% of addresses](https://digital-land.github.io/local-authority-addresses/analysis/) in England are in a different local authority district to the one assigned to the postcode by ONSPD. This includes more than 600 English addresses which are attributed to a Scottish or Welsh local authority when using the postcode alone. NSPL has similar issues.
 
 Sources such as ONSPD and NSPL are designed for grouping data containing addresses when compiling statistics. They don’t indicate where addresses with the same postcode are in different local authority districts.
 
@@ -24,7 +24,9 @@ Sources such as ONSPD and NSPL are designed for grouping data containing address
 
 A service asking for information may ask the user to choose the local authority from a list of local authorities.
 
-This approach places a burden on the user, and does not work well for many people in many situations. Asking for the local authority is may be difficult for a user providing information about different place to where they live, or an place close a local authority boundary. In such cases the user will either need to search for the information, or resort to guessing.
+This approach places a burden on the user, and does not work well for many people in many situations. 
+The user may not know the local authority for an address which is not where they live, especially if that place is close a local authority boundary.
+In such cases the user will either need to search for the information elsewhere, or may resort to making a guess.
 
 
 ## Use the UPRN
