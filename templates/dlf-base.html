@@ -4,7 +4,7 @@
 
 {% block head %}
 <!-- TBD: move to version which is on our CDN -->
-<link href="https://digital-land-design.herokuapp.com/static/stylesheets/dl-frontend.css" rel="stylesheet" />
+<link href="/stylesheets/dl-frontend.css" rel="stylesheet" />
 {% endblock %}
 
 {% block header %}
@@ -27,7 +27,7 @@
 {% block content %}{% endblock %}
 
 {% block bodyEnd %}
-<script src="/static/javascripts/govuk/govuk-frontend-3.0.0.min.js"></script>
+<script src="/javascripts/govuk/govuk-frontend.min.js"></script>
 <script>
 	// initiate all GOVUK components
 	window.GOVUKFrontend.initAll();
